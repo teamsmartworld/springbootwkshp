@@ -1,20 +1,4 @@
 // DetailsRepositoryTest.java
-package com.teamsmartworld.springbootwkshp.repository;
-
-import com.teamsmartworld.springbootwkshp.model.AppUser;
-import com.teamsmartworld.springbootwkshp.model.Details;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.ActiveProfiles;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-
 @DataJpaTest
 @ActiveProfiles("test")
 class DetailsRepositoryTest {
@@ -30,51 +14,71 @@ class DetailsRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        // Create and save test user
         testUser = new AppUser();
+        testUser.setUsername("testuser");
         testUser.setName("Test User");
-        testUser.setEmail("test@example.com");
-        testUser.setBirthDate(LocalDate.of(1990, 1, 1));
-        testUser = appUserRepository.save(testUser);
 
-        // Create test details
         testDetails = new Details();
-        testDetails.setUsername("testuser");
-        testDetails.setPassword("TestPass123!");
-        testDetails.setRegDate(LocalDate.now());
-        testDetails.setUserDetails(testUser);
+        testDetails.setEmail("test@example.com");
+        testDetails.setAppUser(testUser);
+        testUser.setDetails(testDetails);
+
+        appUserRepository.save(testUser);
     }
 
     @Test
-    void shouldSaveDetails() {
-        Details savedDetails = detailsRepository.save(testDetails);
-        assertThat(savedDetails.getId()).isNotNull();
-        assertThat(savedDetails.getUsername()).isEqualTo(testDetails.getUsername());
+    @DisplayName("Should find details by email")
+    void shouldFindByEmail() {
+        Optional<Details> found = detailsRepository.findByEmail("test@example.com");
+
+        assertThat(found)
+                .isPresent()
+                .hasValueSatisfying(details -> {
+                    assertThat(details.getAppUser().getUsername()).isEqualTo("testuser");
+                });
     }
 
     @Test
-    void shouldFindByUsername() {
-        detailsRepository.save(testDetails);
-        Optional<Details> found = detailsRepository.findByUsername("testuser");
-        assertThat(found).isPresent();
-        assertThat(found.get().getUserDetails().getEmail()).isEqualTo("test@example.com");
+    @DisplayName("Should find details by user name contains")
+    void shouldFindByNameContains() {
+        List<Details> found = detailsRepository.findByAppUser_NameContaining("Test");
+
+        assertThat(found).hasSize(1);
+        assertThat(found.get(0).getEmail()).isEqualTo("test@example.com");
     }
 
     @Test
-    void shouldFindByRegDateBetween() {
-        detailsRepository.save(testDetails);
-        LocalDate startDate = LocalDate.now().minusDays(1);
-        LocalDate endDate = LocalDate.now().plusDays(1);
+    @DisplayName("Should find details by user name ignore case")
+    void shouldFindByNameIgnoreCase() {
+        List<Details> found = detailsRepository.findByAppUser_NameIgnoreCase("TEST USER");
 
-        List<Details> details = detailsRepository.findByRegDateBetween(startDate, endDate);
-        assertThat(details).hasSize(1);
-        assertThat(details.get(0).getUsername()).isEqualTo(testDetails.getUsername());
+        assertThat(found).hasSize(1);
+        assertThat(found.get(0).getEmail()).isEqualTo("test@example.com");
     }
 
     @Test
-    void shouldCheckIfUsernameExists() {
-        detailsRepository.save(testDetails);
-        boolean exists = detailsRepository.existsByUsername("testuser");
-        assertThat(exists).isTrue();
+    @DisplayName("Should not allow duplicate email")
+    void shouldNotAllowDuplicateEmail() {
+        AppUser anotherUser = new AppUser();
+        anotherUser.setUsername("another");
+        anotherUser.setName("Another User");
+
+        Details duplicateDetails = new Details();
+        duplicateDetails.setEmail("test@example.com");
+        duplicateDetails.setAppUser(anotherUser);
+        anotherUser.setDetails(duplicateDetails);
+
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            appUserRepository.save(anotherUser);
+            appUserRepository.flush();
+        });
+    }
+
+    @Test
+    @DisplayName("Should set registration date automatically")
+    void shouldSetRegistrationDateAutomatically() {
+        assertThat(testDetails.getRegistrationDate())
+                .isNotNull()
+                .isEqualTo(LocalDate.now());
     }
 }

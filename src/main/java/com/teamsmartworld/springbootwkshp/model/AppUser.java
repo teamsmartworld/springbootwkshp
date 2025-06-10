@@ -2,9 +2,7 @@
 package com.teamsmartworld.springbootwkshp.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,18 +20,16 @@ public class AppUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Email(message = "Please provide a valid email address")
-    @NotBlank(message = "Email cannot be empty")
     @Column(unique = true, nullable = false)
-    private String email;
+    @NotBlank(message = "Username cannot be empty")
+    private String username;
 
-    @NotBlank(message = "Name cannot be empty")
     @Column(nullable = false)
+    @NotBlank(message = "Name cannot be empty")
     private String name;
 
-    @Past(message = "Birth date must be in the past")
     private LocalDate birthDate;
 
-    @OneToOne(mappedBy = "userDetails", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "appUser", cascade = CascadeType.ALL)
     private Details details;
 }
