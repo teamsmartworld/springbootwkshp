@@ -40,14 +40,16 @@ public class Author {
         this.lastName = lastName;
     }
 
-    // Add a book to author's written books
+    // Add a book to author's written books (bidirectional)
     public void addBook(Book book) {
         writtenBooks.add(book);
+        book.getAuthors().add(this);
     }
 
-    // Remove a book from author's written books
+    // Remove a book from author's written books (bidirectional)
     public void removeBook(Book book) {
         writtenBooks.remove(book);
+        book.getAuthors().remove(this);
     }
 
     // Get full name

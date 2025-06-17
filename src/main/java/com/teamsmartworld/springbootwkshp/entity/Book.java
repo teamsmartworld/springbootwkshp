@@ -6,6 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "books")
 @Data
@@ -25,4 +28,19 @@ public class Book {
 
     @Column(name = "max_loan_days", nullable = false)
     private Integer maxLoanDays;
+    
+    @ManyToMany(mappedBy = "writtenBooks")
+    private Set<Author> authors = new HashSet<>();
+    
+    // Add an author to this book (bidirectional)
+    public void addAuthor(Author author) {
+        authors.add(author);
+        author.getWrittenBooks().add(this);
+    }
+    
+    // Remove an author from this book (bidirectional)
+    public void removeAuthor(Author author) {
+        authors.remove(author);
+        author.getWrittenBooks().remove(this);
+    }
 }
