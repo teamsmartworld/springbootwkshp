@@ -1,7 +1,7 @@
 // BookLoanRepository.java
 package com.teamsmartworld.springbootwkshp.repository;
 
-import com.teamsmartworld.springbootwkshp.model.BookLoan;
+import com.teamsmartworld.springbootwkshp.entity.BookLoan;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

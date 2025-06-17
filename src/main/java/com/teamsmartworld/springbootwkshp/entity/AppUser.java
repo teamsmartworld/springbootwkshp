@@ -1,5 +1,5 @@
 // AppUser.java
-package com.teamsmartworld.springbootwkshp.model;
+package com.teamsmartworld.springbootwkshp.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;

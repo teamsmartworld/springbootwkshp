@@ -1,5 +1,5 @@
 // Book.java
-package com.teamsmartworld.springbootwkshp.model;
+package com.teamsmartworld.springbootwkshp.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
