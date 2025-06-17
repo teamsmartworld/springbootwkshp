@@ -1,7 +1,7 @@
 // DetailsRepository.java
 package com.teamsmartworld.springbootwkshp.repository;
 
-import com.teamsmartworld.springbootwkshp.model.Details;
+import com.teamsmartworld.springbootwkshp.entity.Details;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
