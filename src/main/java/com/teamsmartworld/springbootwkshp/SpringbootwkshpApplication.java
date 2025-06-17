@@ -1,7 +1,7 @@
 package com.teamsmartworld.springbootwkshp;
 
-import com.teamsmartworld.springbootwkshp.entity.AppUser;
-import com.teamsmartworld.springbootwkshp.entity.Details;
+import com.teamsmartworld.springbootwkshp.model.AppUser;
+import com.teamsmartworld.springbootwkshp.model.Details;
 import com.teamsmartworld.springbootwkshp.repository.AppUserRepository;
 import com.teamsmartworld.springbootwkshp.repository.DetailsRepository;
 import org.slf4j.Logger;

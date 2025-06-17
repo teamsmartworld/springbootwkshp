@@ -1,4 +1,23 @@
 // DetailsRepositoryTest.java
+package com.teamsmartworld.springbootwkshp.repository;
+
+import com.teamsmartworld.springbootwkshp.entity.AppUser;
+import com.teamsmartworld.springbootwkshp.entity.Details;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.context.ActiveProfiles;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 @DataJpaTest
 @ActiveProfiles("test")
 class DetailsRepositoryTest {
@@ -78,7 +97,9 @@ class DetailsRepositoryTest {
     @DisplayName("Should set registration date automatically")
     void shouldSetRegistrationDateAutomatically() {
         assertThat(testDetails.getRegistrationDate())
-                .isNotNull()
-                .isEqualTo(LocalDate.now());
+                .isNotNull();
+        // Using isEqualTo with LocalDate.now() can be flaky if the test runs near midnight
+        // Better to check that it's today's date
+        assertThat(testDetails.getRegistrationDate().isEqual(LocalDate.now())).isTrue();
     }
 }

@@ -1,7 +1,7 @@
 // AuthorRepository.java
 package com.teamsmartworld.springbootwkshp.repository;
 
-import com.teamsmartworld.springbootwkshp.entity.Author;
+import com.teamsmartworld.springbootwkshp.model.Author;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

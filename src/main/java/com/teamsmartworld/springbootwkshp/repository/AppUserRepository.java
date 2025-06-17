@@ -1,7 +1,7 @@
 // AppUserRepository.java
 package com.teamsmartworld.springbootwkshp.repository;
 
-import com.teamsmartworld.springbootwkshp.entity.AppUser;
+import com.teamsmartworld.springbootwkshp.model.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
